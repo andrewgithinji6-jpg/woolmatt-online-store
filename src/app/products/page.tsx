@@ -8,21 +8,7 @@ import { ProductGrid } from '@/components/products/ProductGrid';
 import { FilterSidebar } from '@/components/search/FilterSidebar';
 import { SearchBar } from '@/components/search/SearchBar';
 import { motion } from 'framer-motion';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  original_price: number | null;
-  discount: number;
-  category_id: number;
-  rating: number;
-  reviews: number;
-  in_stock: boolean;
-  image_url: string;
-  created_at: string;
-}
+import { Product } from '@/types';  // ← use the global type
 
 export default function ProductsPage() {
   const [isMounted, setIsMounted] = useState(false);
@@ -46,26 +32,39 @@ export default function ProductsPage() {
   }, []);
 
   const fetchProducts = async () => {
-    try {
-      setLoading(true);
-      const { data, error } = await supabase
-        .from('products')
-        .select('*')
-        .order('created_at', { ascending: false });
+  try {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) {
-        console.error('Error fetching products:', error);
-        setAllProducts([]);
-      } else {
-        setAllProducts(data || []);
-      }
-    } catch (err) {
-      console.error('Error:', err);
+    if (error) {
+      console.error('Error fetching products:', error);
       setAllProducts([]);
-    } finally {
-      setLoading(false);
+    } else {
+      const mapped: Product[] = (data || []).map((p: any) => ({
+        id: String(p.id),
+        name: p.name,
+        description: p.description ?? '',
+        price: p.price,
+        originalPrice: p.original_price ?? undefined,
+        image: p.image_url ?? '',
+        category: String(p.category_id ?? ''),
+        rating: p.rating ?? 0,
+        reviews: p.reviews ?? 0,
+        inStock: p.in_stock ?? true,
+        discount: p.discount ?? undefined,
+      }));
+      setAllProducts(mapped);
     }
-  };
+  } catch (err) {
+    console.error('Error:', err);
+    setAllProducts([]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {

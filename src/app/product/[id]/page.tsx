@@ -144,8 +144,6 @@ export default function ProductDetailPage({
     ? product.original_price - product.price
     : 0;
 
-  const imageUrl = getImageUrl(product.image_url);
-
   return (
     <motion.main
       initial={{ opacity: 0 }}
