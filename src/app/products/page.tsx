@@ -77,13 +77,9 @@ export default function ProductsPage() {
 
       // Category filter - match by category_id instead of name
       const matchesCategory =
-        !selectedCategory ||
-        allProducts.some(
-          (p) =>
-            p.category_id === product.category_id &&
-            selectedCategory === product.name.split(' ')[0] // Simple match
-        ) ||
-        product.name.toLowerCase().includes(selectedCategory.toLowerCase());
+  !selectedCategory ||
+  product.category.toLowerCase().includes(selectedCategory.toLowerCase()) ||
+  product.name.toLowerCase().includes(selectedCategory.toLowerCase());
 
       // Price filter
       const matchesPrice =
