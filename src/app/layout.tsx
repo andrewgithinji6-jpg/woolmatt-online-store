@@ -1,8 +1,10 @@
 import type { Metadata } from 'next'
-import './globals.css'
 import { Header } from '@/components/layout/Header'
 import { Navigation } from '@/components/layout/Navigation'
 import { Footer } from '@/components/layout/Footer'
+
+// Import CSS after other imports
+import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Woolmatt Supermarket - Online Store | Nakuru, Kenya',
