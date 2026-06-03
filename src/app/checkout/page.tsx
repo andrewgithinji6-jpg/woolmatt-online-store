@@ -6,7 +6,6 @@ import { FiArrowLeft, FiCheck, FiAlertCircle } from 'react-icons/fi';
 import { useCartStore } from '@/store/cartStore';
 import { supabase } from '@/lib/supabase';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 interface FormData {
   fullName: string;
@@ -28,7 +27,6 @@ export default function CheckoutPage() {
   const [orderId, setOrderId] = useState<string | null>(null);
   const [orderNumber, setOrderNumber] = useState<string | null>(null);
 
-  const router = useRouter();
   const items = useCartStore((state) => state.items);
   const clearCart = useCartStore((state) => state.clearCart);
 
