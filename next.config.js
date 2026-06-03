@@ -4,11 +4,11 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: '**',
+        hostname: '**.supabase.co',
       },
     ],
   },
-  reactStrictMode: true,
-}
+  compress: true,
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
