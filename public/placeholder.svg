@@ -1,0 +1,22 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <style>
+      .placeholder-bg { fill: #f3f4f6; }
+      .placeholder-text { font-family: Arial, sans-serif; font-size: 24px; fill: #9ca3af; text-anchor: middle; }
+      .placeholder-icon { fill: #d1d5db; }
+    </style>
+  </defs>
+  
+  <rect width="500" height="500" class="placeholder-bg"/>
+  
+  <!-- Camera icon -->
+  <g transform="translate(175, 150)">
+    <rect x="10" y="30" width="150" height="120" rx="10" class="placeholder-icon" opacity="0.3"/>
+    <circle cx="85" cy="90" r="30" class="placeholder-icon" opacity="0.3"/>
+    <circle cx="85" cy="90" r="20" class="placeholder-bg"/>
+    <rect x="140" y="40" width="25" height="25" rx="5" class="placeholder-icon" opacity="0.3"/>
+  </g>
+  
+  <text x="250" y="330" class="placeholder-text">No Image</text>
+  <text x="250" y="370" class="placeholder-text" font-size="16">Available</text>
+</svg>
