@@ -8,7 +8,7 @@ interface ProductSpecsProps {
   inStock: boolean;
 }
 
-export const ProductSpecs: React.FC<ProductSpecsProps> = ({ inStock }) => {
+export const ProductSpecs: React.FC<ProductSpecsProps> = ({ inStock: _inStock }) => {
   const specs = [
     {
       icon: FiCheck,

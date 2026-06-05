@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FiStar, FiThumbsUp, FiUser } from 'react-icons/fi';
+import { FiThumbsUp } from 'react-icons/fi';
 
 interface Review {
   id: string;

@@ -11,7 +11,7 @@ export const SearchBar: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<typeof products>([]);
   const [localQuery, setLocalQuery] = useState('');
-  const { searchQuery, setSearchQuery } = useFilterStore();
+  const { setSearchQuery } = useFilterStore();
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 

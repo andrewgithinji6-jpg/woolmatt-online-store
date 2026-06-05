@@ -70,23 +70,16 @@ export default function CartPage() {
                 {/* Cart Items List */}
                 <div>
                   {items.map((item) => (
-                    <motion.div
-                      key={item.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: -10 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      <CartItem
-  id={item.id}
-  name={item.name}
-  price={item.price}
-  image_url={item.image_url}
-  cartQuantity={item.cartQuantity}
-  in_stock={item.in_stock}
-/>
-                    </motion.div>
-                  ))}
+  <motion.div
+    key={item.id}
+    initial={{ opacity: 0, y: 10 }}
+    animate={{ opacity: 1, y: 0 }}
+    exit={{ opacity: 0, y: -10 }}
+    transition={{ duration: 0.3 }}
+  >
+    <CartItem item={item} />
+  </motion.div>
+))}
                 </div>
               </div>
 

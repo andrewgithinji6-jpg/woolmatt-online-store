@@ -72,8 +72,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
 
         <div className="p-4">
           <p className="text-xs text-gray-500 uppercase font-semibold mb-1">
-            {product.category}  // ← show actual category
-          </p>
+  {product.category}
+</p>
 
           <h3 className="font-bold text-gray-800 text-base mb-2 line-clamp-2 group-hover:text-woolmatt-primary">
             {product.name}

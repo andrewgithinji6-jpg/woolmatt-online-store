@@ -2,19 +2,19 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
 export interface CartItem {
-  id: number;
+  id: string;
   name: string;
   price: number;
-  image_url: string;
+  image: string;
   cartQuantity: number;
-  in_stock: boolean;
+  inStock: boolean;
 }
 
 interface CartState {
   items: CartItem[];
   addToCart: (product: any, quantity: number) => void;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeFromCart: (id: string) => void;
+  updateQuantity: (id: string, quantity: number) => void;
   clearCart: () => void;
   getTotalItems: () => number;
   getTotalPrice: () => number;
@@ -27,12 +27,12 @@ export const useCartStore = create<CartState>()(
 
       addToCart: (product, quantity) => {
         const { items } = get();
-        const existingItem = items.find((item) => item.id === product.id);
+        const existingItem = items.find((item) => item.id === String(product.id));
 
         if (existingItem) {
           set({
             items: items.map((item) =>
-              item.id === product.id
+              item.id === String(product.id)
                 ? { ...item, cartQuantity: item.cartQuantity + quantity }
                 : item
             ),
@@ -42,12 +42,12 @@ export const useCartStore = create<CartState>()(
             items: [
               ...items,
               {
-                id: product.id,
+                id: String(product.id),
                 name: product.name,
                 price: product.price,
-                image_url: product.image_url,
+                image: product.image ?? product.image_url ?? '',
                 cartQuantity: quantity,
-                in_stock: product.in_stock,
+                inStock: product.inStock ?? product.in_stock ?? true,
               },
             ],
           });
@@ -70,23 +70,14 @@ export const useCartStore = create<CartState>()(
         });
       },
 
-      clearCart: () => {
-        set({ items: [] });
-      },
+      clearCart: () => set({ items: [] }),
 
-      getTotalItems: () => {
-        return get().items.reduce((total, item) => total + item.cartQuantity, 0);
-      },
+      getTotalItems: () =>
+        get().items.reduce((total, item) => total + item.cartQuantity, 0),
 
-      getTotalPrice: () => {
-        return get().items.reduce(
-          (total, item) => total + item.price * item.cartQuantity,
-          0
-        );
-      },
+      getTotalPrice: () =>
+        get().items.reduce((total, item) => total + item.price * item.cartQuantity, 0),
     }),
-    {
-      name: 'woolmatt-cart',
-    }
+    { name: 'woolmatt-cart' }
   )
 );

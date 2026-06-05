@@ -186,14 +186,14 @@ export default function CheckoutPage() {
     // Create order items
     console.log('Creating order items...');
     const orderItems = items.map((item) => ({
-      order_id: order.id,
-      product_id: item.id,
-      product_name: item.name,
-      product_price: Math.round(item.price * 100) / 100,
-      quantity: item.cartQuantity,
-      image_url: item.image_url,
-      subtotal: Math.round(item.price * item.cartQuantity * 100) / 100,
-    }));
+  order_id: order.id,
+  product_id: item.id,
+  product_name: item.name,
+  product_price: Math.round(item.price * 100) / 100,
+  quantity: item.cartQuantity,
+  image_url: item.image,          // ← image_url → image
+  subtotal: Math.round(item.price * item.cartQuantity * 100) / 100,
+}));
 
     console.log('Order items:', orderItems);
 

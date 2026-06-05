@@ -2,21 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { supabase } from '@/lib/supabase';
-
-export interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  original_price: number | null;
-  discount: number;
-  category_id: number;
-  rating: number;
-  reviews: number;
-  in_stock: boolean;
-  image_url: string;
-  created_at: string;
-}
+import { Product } from '@/types';
 
 export function useProducts() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -32,11 +18,23 @@ export function useProducts() {
           .select('*')
           .order('created_at', { ascending: false });
 
-        if (fetchError) {
-          throw fetchError;
-        }
+        if (fetchError) throw fetchError;
 
-        setProducts(data || []);
+        const mapped: Product[] = (data || []).map((p: any) => ({
+          id: String(p.id),
+          name: p.name,
+          description: p.description ?? '',
+          price: p.price,
+          originalPrice: p.original_price ?? undefined,
+          image: p.image_url ?? '',
+          category: String(p.category_id ?? ''),
+          rating: p.rating ?? 0,
+          reviews: p.reviews ?? 0,
+          inStock: p.in_stock ?? true,
+          discount: p.discount ?? undefined,
+        }));
+
+        setProducts(mapped);
         setError(null);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Failed to fetch products');
@@ -52,5 +50,4 @@ export function useProducts() {
   return { products, loading, error };
 }
 
-// Export the utility functions
 export { getImageUrl, handleImageError, PLACEHOLDER_SVG } from '@/utils/imageUtils';

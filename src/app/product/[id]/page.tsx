@@ -12,21 +12,7 @@ import { FiHeart, FiShare2, FiShoppingCart, FiMinus, FiPlus } from 'react-icons/
 import Link from 'next/link';
 import { getImageUrl } from '@/hooks/useProducts';
 import { handleImageError } from '@/utils/imageUtils';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  original_price: number | null;
-  discount: number;
-  category_id: number;
-  rating: number;
-  reviews: number;
-  in_stock: boolean;
-  image_url: string;
-  created_at: string;
-}
+import { Product } from '@/types';
 
 interface ProductDetailPageProps {
   params: {
@@ -54,39 +40,64 @@ export default function ProductDetailPage({
   }, [params.id]);
 
   const fetchProduct = async () => {
-    try {
-      setLoading(true);
+  try {
+    setLoading(true);
 
-      // Fetch single product
-      const { data: productData, error: productError } = await supabase
-        .from('products')
-        .select('*')
-        .eq('id', parseInt(params.id))
-        .single();
+    const { data: productData, error: productError } = await supabase
+      .from('products')
+      .select('*')
+      .eq('id', parseInt(params.id))
+      .single();
 
-      if (productError) {
-        console.error('Error fetching product:', productError);
-        setProduct(null);
-        return;
-      }
-
-      // Fetch all products for related products
-      const { data: allProductsData, error: allError } = await supabase
-        .from('products')
-        .select('*');
-
-      if (!allError && allProductsData) {
-        setAllProducts(allProductsData);
-      }
-
-      setProduct(productData);
-    } catch (error) {
-      console.error('Error:', error);
+    if (productError) {
+      console.error('Error fetching product:', productError);
       setProduct(null);
-    } finally {
-      setLoading(false);
+      return;
     }
-  };
+
+    const { data: allProductsData, error: allError } = await supabase
+      .from('products')
+      .select('*');
+
+    if (!allError && allProductsData) {
+      const mappedAll: Product[] = allProductsData.map((p: any) => ({
+        id: String(p.id),
+        name: p.name,
+        description: p.description ?? '',
+        price: p.price,
+        originalPrice: p.original_price ?? undefined,
+        image: p.image_url ?? '',
+        category: String(p.category_id ?? ''),
+        rating: p.rating ?? 0,
+        reviews: p.reviews ?? 0,
+        inStock: p.in_stock ?? true,
+        discount: p.discount ?? undefined,
+      }));
+      setAllProducts(mappedAll);
+    }
+
+    const mapped: Product = {
+      id: String(productData.id),
+      name: productData.name,
+      description: productData.description ?? '',
+      price: productData.price,
+      originalPrice: productData.original_price ?? undefined,
+      image: productData.image_url ?? '',
+      category: String(productData.category_id ?? ''),
+      rating: productData.rating ?? 0,
+      reviews: productData.reviews ?? 0,
+      inStock: productData.in_stock ?? true,
+      discount: productData.discount ?? undefined,
+    };
+
+    setProduct(mapped);
+  } catch (error) {
+    console.error('Error:', error);
+    setProduct(null);
+  } finally {
+    setLoading(false);
+  }
+};
 
   if (!isMounted) {
     return (
@@ -140,9 +151,7 @@ export default function ProductDetailPage({
   };
 
   const discountPercentage = product.discount || 0;
-  const savings = product.original_price
-    ? product.original_price - product.price
-    : 0;
+  const savings = product.originalPrice ? product.originalPrice - product.price : 0;
 
   return (
     <motion.main
@@ -180,7 +189,7 @@ export default function ProductDetailPage({
 >
   <div className="relative bg-woolmatt-light rounded-lg overflow-hidden aspect-square flex items-center justify-center">
     <img
-      src={getImageUrl(product.image_url)}
+      src={getImageUrl(product.image)}
       alt={product.name}
       className="w-full h-full object-cover"
       onError={handleImageError}
@@ -201,7 +210,7 @@ export default function ProductDetailPage({
                 <span className="text-sm font-semibold text-woolmatt-secondary uppercase">
                   Product
                 </span>
-                {product.in_stock ? (
+                {product.inStock ? (
                   <span className="text-sm font-semibold text-green-600">
                     ✓ In Stock
                   </span>
@@ -239,9 +248,9 @@ export default function ProductDetailPage({
                 <span className="text-4xl font-bold text-woolmatt-primary">
                   KES {product.price.toLocaleString()}
                 </span>
-                {product.original_price && (
+                {product.originalPrice && (
                   <span className="text-lg text-gray-400 line-through">
-                    KES {product.original_price.toLocaleString()}
+                    KES {product.originalPrice.toLocaleString()}
                   </span>
                 )}
               </div>
@@ -259,7 +268,7 @@ export default function ProductDetailPage({
             </div>
 
             {/* Quantity Selector */}
-            {product.in_stock && (
+            {product.inStock && (
               <div className="mb-6">
                 <p className="text-sm font-semibold text-woolmatt-dark mb-3">
                   Quantity
@@ -286,7 +295,7 @@ export default function ProductDetailPage({
             <div className="flex gap-4 mb-6">
               <Button
                 onClick={handleAddToCart}
-                disabled={!product.in_stock}
+                disabled={!product.inStock}
                 variant="primary"
                 size="lg"
                 className="flex-1"
@@ -311,7 +320,7 @@ export default function ProductDetailPage({
             </div>
 
             {/* Product Specs */}
-            <ProductSpecs inStock={product.in_stock} />
+            <ProductSpecs inStock={product.inStock} />
           </motion.div>
         </div>
 

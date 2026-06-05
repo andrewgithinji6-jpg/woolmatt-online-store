@@ -104,15 +104,7 @@ export default function CartPage() {
             className="lg:col-span-2 bg-white rounded-lg shadow-card p-6"
           >
             {items.map((item) => (
-              <CartItem
-                key={item.id}
-                id={item.id}
-                name={item.name}
-                price={item.price}
-                image_url={item.image_url}
-                cartQuantity={item.cartQuantity}
-                in_stock={item.in_stock}
-              />
+              <CartItem item={item} />
             ))}
           </motion.div>
 

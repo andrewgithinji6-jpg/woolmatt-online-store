@@ -3,23 +3,10 @@
 import React from 'react';
 import { ProductCard } from './ProductCard';
 import { motion } from 'framer-motion';
-
-interface Product {
-  id: number;
-  name: string;
-  description: string;
-  price: number;
-  original_price: number | null;
-  discount: number;
-  image_url: string;
-  rating: number;
-  reviews: number;
-  in_stock: boolean;
-  category_id: number;
-}
+import { Product } from '@/types';
 
 interface RelatedProductsProps {
-  currentProductId: number;
+  currentProductId: string;
   allProducts: Product[];
 }
 
@@ -27,15 +14,12 @@ export const RelatedProducts: React.FC<RelatedProductsProps> = ({
   currentProductId,
   allProducts,
 }) => {
-  // Get 4 random related products (excluding current)
   const relatedProducts = allProducts
     .filter((p) => p.id !== currentProductId)
     .sort(() => Math.random() - 0.5)
     .slice(0, 4);
 
-  if (relatedProducts.length === 0) {
-    return null;
-  }
+  if (relatedProducts.length === 0) return null;
 
   return (
     <motion.section
