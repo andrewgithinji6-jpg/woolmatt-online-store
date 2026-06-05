@@ -77,7 +77,14 @@ export default function CartPage() {
                       exit={{ opacity: 0, y: -10 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <CartItem item={item} />
+                      <CartItem
+  id={item.id}
+  name={item.name}
+  price={item.price}
+  image_url={item.image_url}
+  cartQuantity={item.cartQuantity}
+  in_stock={item.in_stock}
+/>
                     </motion.div>
                   ))}
                 </div>
